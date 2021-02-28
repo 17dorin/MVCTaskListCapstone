@@ -19,14 +19,19 @@ namespace ToDoMVC.Controllers
         }
 
         [Authorize]
-        public IActionResult AddToDo()
+        public IActionResult ViewToDos()
         {
             //I would love some feedback on how to improve this method of getting the current logged-in user.
             //I'm aware this this is a pretty hacky and ugly solution. Unfortunately, this is the only way
             //I could get it to work properly
-            string id = User.Identity.Name;
-            List<AspNetUsers> loggedIn = _context.AspNetUsers.Include(x => x.ToDos).Where(x => x.UserName == id).ToList();
+            List<AspNetUsers> loggedIn = _context.AspNetUsers.Include(x => x.ToDos).Where(x => x.UserName == User.Identity.Name).ToList();
             return View(loggedIn[0]);
+        }
+
+        [Authorize]
+        public IActionResult AddToDo()
+        {
+            return View();
         }
 
         [Authorize]
@@ -43,7 +48,7 @@ namespace ToDoMVC.Controllers
             _context.ToDos.Add(t);
             _context.SaveChanges();
 
-            return RedirectToAction("AddToDo");
+            return RedirectToAction("ViewToDos");
         }
 
         [Authorize]

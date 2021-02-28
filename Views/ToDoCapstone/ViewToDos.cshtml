@@ -1,0 +1,30 @@
+﻿@model AspNetUsers
+<input type="button" value="Add To-Do" name="Id" onclick="window.location='@Url.Action("AddToDo", "ToDoCapstone")'" />
+<h2>To-Do List:</h2>
+@{
+    if (Model.ToDos.Count != 0)
+    {
+        foreach (ToDos t in Model.ToDos)
+        {
+            <p>_____________________________________________</p>
+            <h4>@t.Details</h4>
+            <p>Is complete? @t.Completed</p>
+            @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
+            {
+                <p>Due date: N/A</p>
+            }
+            else
+            {
+                <p>Due date: @t.DueDate</p>
+            }
+            <input type="button" value="Update Completion" name="Id" onclick="window.location='@Url.Action("UpdateCompletion", "ToDoCapstone", @t)'" />
+            <br />
+            <input type="button" value="Delete" name="Id" onclick="window.location='@Url.Action("DeleteItem", "ToDoCapstone", @t)'" />
+            <br />
+        }
+    }
+    else
+    {
+        <h3>No To-Dos have been added</h3>
+    }
+}
