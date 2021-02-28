@@ -1,27 +1,114 @@
 ﻿@model AspNetUsers
+
+<h6>Add item:</h6>
 <input type="button" value="Add To-Do" name="Id" onclick="window.location='@Url.Action("AddToDo", "ToDoCapstone")'" />
+<br />
+
+<h6>Filter by status:</h6>
+<form method="post">
+    <input type="radio" id="all" name="status" value="all" />
+    <label for="all">All</label>
+    <br />
+    <input type="radio" id="true" name="status" value="true" />
+    <label for="true">Complete</label>
+    <br />
+    <input type="radio" id="false" name="status" value="false" />
+    <label for="false">Incomplete</label>
+    <br />
+    <input type="submit" value="Update" />
+</form>
 <h2>To-Do List:</h2>
 @{
     if (Model.ToDos.Count != 0)
     {
-        foreach (ToDos t in Model.ToDos)
+        if (TempData["status"] != null)
         {
-            <p>_____________________________________________</p>
-            <h4>@t.Details</h4>
-            <p>Is complete? @t.Completed</p>
-            @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
+            if (TempData["status"].ToString() == "true")
             {
-                <p>Due date: N/A</p>
+                foreach (ToDos t in Model.ToDos.Where(x => x.Completed == true))
+                {
+                    <p>_____________________________________________</p>
+                    <h4>@t.Details</h4>
+                    <p>Is complete? @t.Completed</p>
+                    @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
+                    {
+                        <p>Due date: N/A</p>
+                    }
+                    else
+                    {
+                        <p>Due date: @t.DueDate</p>
+                    }
+                    <input type="button" value="Update Completion" name="Id" onclick="window.location='@Url.Action("UpdateCompletion", "ToDoCapstone", @t)'" />
+                    <br />
+                    <input type="button" value="Delete" name="Id" onclick="window.location='@Url.Action("DeleteItem", "ToDoCapstone", @t)'" />
+                    <br />
+                }
+            }
+            else if (TempData["status"].ToString() == "false")
+            {
+                foreach (ToDos t in Model.ToDos.Where(x => x.Completed == false))
+                {
+                    <p>_____________________________________________</p>
+                    <h4>@t.Details</h4>
+                    <p>Is complete? @t.Completed</p>
+                    @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
+                    {
+                        <p>Due date: N/A</p>
+                    }
+                    else
+                    {
+                        <p>Due date: @t.DueDate</p>
+                    }
+                    <input type="button" value="Update Completion" name="Id" onclick="window.location='@Url.Action("UpdateCompletion", "ToDoCapstone", @t)'" />
+                    <br />
+                    <input type="button" value="Delete" name="Id" onclick="window.location='@Url.Action("DeleteItem", "ToDoCapstone", @t)'" />
+                    <br />
+                }
             }
             else
             {
-                <p>Due date: @t.DueDate</p>
+                foreach (ToDos t in Model.ToDos)
+                {
+                    <p>_____________________________________________</p>
+                    <h4>@t.Details</h4>
+                    <p>Is complete? @t.Completed</p>
+                    @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
+                    {
+                        <p>Due date: N/A</p>
+                    }
+                    else
+                    {
+                        <p>Due date: @t.DueDate</p>
+                    }
+                    <input type="button" value="Update Completion" name="Id" onclick="window.location='@Url.Action("UpdateCompletion", "ToDoCapstone", @t)'" />
+                    <br />
+                    <input type="button" value="Delete" name="Id" onclick="window.location='@Url.Action("DeleteItem", "ToDoCapstone", @t)'" />
+                    <br />
+                }
             }
-            <input type="button" value="Update Completion" name="Id" onclick="window.location='@Url.Action("UpdateCompletion", "ToDoCapstone", @t)'" />
-            <br />
-            <input type="button" value="Delete" name="Id" onclick="window.location='@Url.Action("DeleteItem", "ToDoCapstone", @t)'" />
-            <br />
         }
+        else
+        {
+            foreach (ToDos t in Model.ToDos)
+            {
+                <p>_____________________________________________</p>
+                <h4>@t.Details</h4>
+                <p>Is complete? @t.Completed</p>
+                @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
+                {
+                    <p>Due date: N/A</p>
+                }
+                else
+                {
+                    <p>Due date: @t.DueDate</p>
+                }
+                <input type="button" value="Update Completion" name="Id" onclick="window.location='@Url.Action("UpdateCompletion", "ToDoCapstone", @t)'" />
+                <br />
+                <input type="button" value="Delete" name="Id" onclick="window.location='@Url.Action("DeleteItem", "ToDoCapstone", @t)'" />
+                <br />
+            }
+        }
+
     }
     else
     {

@@ -29,6 +29,16 @@ namespace ToDoMVC.Controllers
         }
 
         [Authorize]
+        [HttpPost]
+        public IActionResult ViewToDos(string status)
+        {
+            List<AspNetUsers> loggedIn = _context.AspNetUsers.Include(x => x.ToDos).Where(x => x.UserName == User.Identity.Name).ToList();
+            TempData["status"] = status;
+
+            return View(loggedIn[0]);
+        }
+
+        [Authorize]
         public IActionResult AddToDo()
         {
             return View();
@@ -58,7 +68,7 @@ namespace ToDoMVC.Controllers
             toUpdate.Completed = !toUpdate.Completed;
             _context.SaveChanges();
 
-            return RedirectToAction("AddToDo");
+            return RedirectToAction("ViewToDos");
         }
 
         [Authorize]
@@ -84,7 +94,7 @@ namespace ToDoMVC.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction("AddToDo");
+            return RedirectToAction("ViewToDos");
         }
     }
 }
