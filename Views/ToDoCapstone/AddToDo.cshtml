@@ -1,38 +1,40 @@
 ﻿@model AspNetUsers
 
-@{ 
+@{
 
-<form method="post" asp-controller="ToDoCapstone" asp-action="AddToDo">
-    <label for="Details">Details</label>
-    <input type="text" name="Details" required/>
-    <br/>
+    <form method="post" asp-controller="ToDoCapstone" asp-action="AddToDo">
+        <label for="Details">Details</label>
+        <input type="text" name="Details" required />
+        <br />
 
-    <label for="DueDate">Due Date</label>
-    <input type="date" name="DueDate"/>
-    <br/>
+        <label for="DueDate">Due Date</label>
+        <input type="date" name="DueDate" />
+        <br />
 
-    <input type="submit"/>
-</form>
+        <input type="submit" />
+    </form>
 
-    if(Model.ToDos.Count != 0)
+    <br />
+
+    if (Model.ToDos.Count != 0)
     {
-        foreach(ToDos t in Model.ToDos)
+        foreach (ToDos t in Model.ToDos)
         {
-               <p>_____________________________________________</p>
-               <h4>@t.Details</h4>
-               <p>Is complete? @t.Completed</p>
-               @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
-                {
-                    <p>Due date: N/A</p>
-                }
-                else
-                {
-                    <p>Due date: @t.DueDate</p>
-                }
-               <a asp-action="UpdateCompletion" asp-route-id="@t.Id">Update Completion</a> 
-               <br/>
-               <a asp-action="DeleteItem" asp-route-id="@t.Id">Delete</a>
-                <br/>
+            <p>_____________________________________________</p>
+            <h4>@t.Details</h4>
+            <p>Is complete? @t.Completed</p>
+            @if (t.DueDate.ToString() == DateTime.MaxValue.ToString())
+            {
+                <p>Due date: N/A</p>
+            }
+            else
+            {
+                <p>Due date: @t.DueDate</p>
+            }
+            <input type="button" value="Update Completion" name="Id" onclick="window.location='@Url.Action("UpdateCompletion", "ToDoCapstone", @t)'" />
+            <br />
+            <input type="button" value="Delete" name="Id" onclick="window.location='@Url.Action("DeleteItem", "ToDoCapstone", @t)'" />
+            <br />
         }
     }
     else

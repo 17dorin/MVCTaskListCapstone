@@ -21,7 +21,7 @@ namespace ToDoMVC.Controllers
         [Authorize]
         public IActionResult AddToDo()
         {
-            //PS, I would love some feedback on how to improve this method of getting the current logged-in user.
+            //I would love some feedback on how to improve this method of getting the current logged-in user.
             //I'm aware this this is a pretty hacky and ugly solution. Unfortunately, this is the only way
             //I could get it to work properly
             string id = User.Identity.Name;
@@ -59,6 +59,7 @@ namespace ToDoMVC.Controllers
         [Authorize]
         public IActionResult DeleteItem(int Id)
         {
+            //Passes the appropraite ToDo into the view, as well as storing the Id in temp data
             ToDos toUpdate = _context.ToDos.Where(x => x.Id == Id).ToList()[0];
             TempData["Id"] = toUpdate.Id;
 
@@ -71,6 +72,8 @@ namespace ToDoMVC.Controllers
         {
             if (option.Equals("yes"))
             {
+                //Messy implementation, but this re-grabs the ToDo using the Id in temp data. Then, removes the ToDo and saves changes
+                //Not sure if there is a cleaner way to cast the temp data Id to an int, but I'd love to know if there is.
                 ToDos toDelete = _context.ToDos.Where(x => x.Id == int.Parse(TempData["Id"].ToString())).ToList()[0];
                 _context.ToDos.Remove(toDelete);
                 _context.SaveChanges();
